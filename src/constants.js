@@ -1,5 +1,5 @@
 export const BACKGROUND_COLOR = '#282c34';
-export const HOUR_WIDTH = 150;  // in minutes
+export const HOUR_WIDTH = 170;  // in minutes
 export const ROOM_COL_WIDTH = 50;
 export const ROOM_COL_TITLE_COLOR = '#969ea4';
 export const TIME_ROW_HEIGHT = 35;
