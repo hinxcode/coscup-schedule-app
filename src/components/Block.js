@@ -6,18 +6,20 @@ const styles = {
   sessionBlock: RX.Styles.createViewStyle({
     height: cst.SESSION_HEIGHT,
     justifyContent: 'flex-end',
-    borderBottomWidth: 3,
-    borderBottomColor: 'rgb(210, 100, 117)',
-    borderLeftWidth: 4,
-    borderLeftColor: 'rgb(40, 44, 52)',
-    borderRightWidth: 4,
-    borderRightColor: 'rgb(40, 44, 52)',
     overflow: 'visible',
     zIndex: 2
   }),
   sessionTime: RX.Styles.createTextStyle({
     color: '#DDD',
     textAlign: 'center'
+  }),
+  timeLine: RX.Styles.createViewStyle({
+    borderLeftWidth: 4,
+    borderLeftColor: 'rgb(40, 44, 52)',
+    borderRightWidth: 4,
+    borderRightColor: 'rgb(40, 44, 52)',
+    borderBottomWidth: 3,
+    borderBottomColor: 'rgb(210, 100, 117)'
   }),
   sessionTitle: RX.Styles.createTextStyle({
     color: '#FFF',
@@ -70,6 +72,11 @@ const Block = props => {
               : null
             }
           </RX.Text>
+      }
+      {
+        props.isEmpty || props.isEmptyButHasTimeLine
+        ? null
+        : <RX.View style={[ styles.timeLine, { width: props.textWidth || props.width } ]} />
       }
     </RX.View>
   );
