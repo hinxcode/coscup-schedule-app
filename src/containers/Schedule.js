@@ -2,17 +2,21 @@ import React from 'react';
 import RX from 'reactxp';
 import Block from '../components/Block';
 import TimeRow from '../components/TimeRow';
+import NavBar from '../components/NavBar';
 import config from '../config';
 import * as cst from '../constants';
 import { getDateDiff, getWidthByTime, getScheduleData } from '../utils';
 
 const styles = {
+  container: RX.Styles.createViewStyle({
+    flex: 1,
+    backgroundColor: cst.BACKGROUND_COLOR
+  }),
   scroll: RX.Styles.createScrollViewStyle({
     marginTop: 20,
     paddingRight: 15,
     flexDirection: 'column',
-    alignSelf: 'flex-start',
-    backgroundColor: 'rgb(40, 44, 52)'
+    alignSelf: 'center'
   }),
   row: RX.Styles.createViewStyle({
     flexDirection: 'row',
@@ -28,7 +32,7 @@ const styles = {
   }),
 };
 
-const getBlocks = (prev, target) => {
+const getBlocks = (prev, target, filter) => {
   const blocks = [];
   let prevEnd;
 
@@ -90,6 +94,7 @@ const getBlocks = (prev, target) => {
           width={getWidthByTime(60 - curStart.getMinutes())}
           textWidth={getWidthByTime(sessionTime)}
           detail={target}
+          filter={filter}
           hasNoRightBound
           isOClock={curStart.getMinutes() === 0}
         />
@@ -118,6 +123,7 @@ const getBlocks = (prev, target) => {
         <Block
           width={getWidthByTime(sessionTime)}
           detail={target}
+          filter={filter}
           isOClock={curStart.getMinutes() === 0}
         />
       );
@@ -132,7 +138,9 @@ export default class Schedule extends RX.Component {
       super(props);
 
       this.state = {
-        json: []
+        json: [],
+        date: 0,
+        display: 'subject'
       };
     }
 
@@ -144,17 +152,21 @@ export default class Schedule extends RX.Component {
       })
     }
 
-    getScheduleView(filter = {}) {
-      const data = this.state.json[filter.date ? filter.date : Object.keys(this.state.json)[0]];
+    getScheduleView() {
+      const filter = {
+        date: this.state.date || Object.keys(this.state.json)[0],
+        display: this.state.display
+      }
+      const data = this.state.json[filter.date];
       const result = [];
       let columns = [];
 
       for (let room of Object.keys(data)) {
         for (let i = 0; i < data[room].length; i++) {
           if (i < 1) {
-            columns.push(getBlocks(null, data[room][i]));
+            columns.push(getBlocks(null, data[room][i], filter));
           } else {
-            columns.push(getBlocks(data[room][i - 1], data[room][i]));
+            columns.push(getBlocks(data[room][i - 1], data[room][i], filter));
           }
         }
 
@@ -164,7 +176,7 @@ export default class Schedule extends RX.Component {
         ending.setMinutes(config.ending.split(':')[1]);
 
         if (getDateDiff(new Date(data[room][data[room].length - 1].end), ending) > 60) {
-          columns.push(getBlocks(data[room][data[room].length - 1], { start: ending, end: ending}));
+          columns.push(getBlocks(data[room][data[room].length - 1], { start: ending, end: ending }, filter));
         }
 
         result.push(
@@ -184,28 +196,35 @@ export default class Schedule extends RX.Component {
       return result;
     }
 
+    onFilterChange(filterName) {
+      this.setState({ display: filterName })
+    }
+
     render() {
       return (
-        <RX.ScrollView
-          style={ styles.scroll }
-          vertical={ false }
-          horizontal={ false }
-          bounces={ false }
-        >
-          <TimeRow
-            begin={parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0]}
-            ending={parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0]}
-            minutesPadding={getWidthByTime(60 - config.begin.split(':')[1])}
-          />
-          {
-            Object.keys(this.state.json).length ? this.getScheduleView() : null
-          }
-          <TimeRow
-            begin={parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0]}
-            ending={parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0]}
-            minutesPadding={getWidthByTime(60 - config.begin.split(':')[1])}
-          />
-        </RX.ScrollView>
+        <RX.View style={ styles.container }>
+          <RX.ScrollView
+            style={ styles.scroll }
+            vertical={ false }
+            horizontal={ false }
+            bounces={ false }
+          >
+            <TimeRow
+              begin={parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0]}
+              ending={parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0]}
+              minutesPadding={getWidthByTime(60 - config.begin.split(':')[1])}
+            />
+            {
+              Object.keys(this.state.json).length ? this.getScheduleView() : null
+            }
+            <TimeRow
+              begin={parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0]}
+              ending={parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0]}
+              minutesPadding={getWidthByTime(60 - config.begin.split(':')[1])}
+            />
+          </RX.ScrollView>
+          <NavBar onClick={v => this.onFilterChange(v)} filterName={this.state.display} />
+        </RX.View>
       );
     }
 }

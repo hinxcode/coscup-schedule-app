@@ -17,9 +17,9 @@ const styles = {
   timeLine: RX.Styles.createViewStyle({
     borderStyle: 'solid',
     borderLeftWidth: 4,
-    borderLeftColor: 'rgb(40, 44, 52)',
+    borderLeftColor: cst.BACKGROUND_COLOR,
     borderRightWidth: 4,
-    borderRightColor: 'rgb(40, 44, 52)',
+    borderRightColor: cst.BACKGROUND_COLOR,
     borderBottomWidth: 3,
     borderBottomColor: 'rgb(210, 100, 117)'
   }),
@@ -86,8 +86,8 @@ const Block = props => {
             { width: props.textWidth || props.width }
           ]}>
             {
-              props.detail && props.detail.subject
-              ? getSubString(props.detail.subject, props.textWidth || props.width)
+              props.detail && props.filter && props.detail[props.filter.display]
+              ? getSubString(props.detail[props.filter.display], props.textWidth || props.width)
               : null
             }
           </RX.Text>
@@ -105,6 +105,7 @@ Block.propTypes = {
   width: PropTypes.number,
   textWidth: PropTypes.number,
   detail: PropTypes.object,
+  filter: PropTypes.object,
   isEmpty: PropTypes.bool,
   isEmptyButHasTimeLine: PropTypes.bool,
   isOClock: PropTypes.bool

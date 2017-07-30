@@ -12,7 +12,9 @@ export const getScheduleData = async () => {
     const result = {};
 
     for (let i = 0; i < json.length; i++) {
-      const date = new Date(json[i].start).getDate();
+      const start = new Date(json[i].start);
+      const end = new Date(json[i].end);
+      const date = start.getDate();
 
       if (!result[date]) {
         result[date] = {};
@@ -20,6 +22,7 @@ export const getScheduleData = async () => {
       if (!result[date][json[i].room]) {
         result[date][json[i].room] = [];
       }
+      json[i].time = `${start.getHours()}:${start.getMinutes()}-${end.getHours()}:${end.getMinutes()}`;
       result[date][json[i].room].push(json[i]);
     }
 

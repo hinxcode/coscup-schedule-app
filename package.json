@@ -17,6 +17,7 @@
     "babel-preset-react-native": "1.9.2",
     "babel-preset-stage-0": "^6.24.1",
     "source-map-loader": "^0.1.6",
+    "url-loader": "^0.5.9",
     "webpack": "2.2.1"
   },
   "dependencies": {

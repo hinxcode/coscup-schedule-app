@@ -1,3 +1,4 @@
+export const BACKGROUND_COLOR = '#282c34';
 export const HOUR_WIDTH = 150;  // in minutes
 export const ROOM_COL_WIDTH = 50;
 export const ROOM_COL_TITLE_COLOR = '#969ea4';

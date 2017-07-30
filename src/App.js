@@ -1,5 +1,5 @@
 import React from 'react';
-import RX from 'reactxp';
+import RX, { StatusBar } from 'reactxp';
 import Schedule from './containers/Schedule';
 import Detail from './containers/Detail';
 
@@ -24,6 +24,8 @@ export default class App extends RX.Component {
     this._renderScene = this._renderScene.bind(this);
     this._onPressNavigate = this._onPressNavigate.bind(this);
     this._onPressBack = this._onPressBack.bind(this);
+
+    StatusBar.setBarStyle('light-content', true);
   }
 
   componentDidMount() {
