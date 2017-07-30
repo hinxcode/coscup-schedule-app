@@ -1,4 +1,4 @@
-package com.rxphelloworld;
+package com.coscup;
 
 import com.facebook.react.ReactActivity;
 
