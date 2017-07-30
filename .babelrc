@@ -1,5 +1,7 @@
 {
   "presets": [
-    "react-native"
+    "react-native",
+    "es2015",
+    "stage-0"
   ]
 }

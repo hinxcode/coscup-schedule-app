@@ -1,16 +1,19 @@
 module.exports = {
-    entry: "./src/index.js",
+    entry: [
+      'babel-polyfill',
+      './src/index.js'
+    ],
     output: {
-        filename: "bundle.js",
-        path: __dirname + "/dist"
+        filename: 'bundle.js',
+        path: __dirname + '/dist'
     },
 
     // Enable sourcemaps for debugging webpack's output.
-    devtool: "source-map",
+    devtool: 'source-map',
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: [".webpack.js", ".web.js", ".js"]
+        extensions: ['.webpack.js', '.web.js', '.js']
     },
 
     module: {

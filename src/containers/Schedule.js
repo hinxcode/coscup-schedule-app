@@ -2,7 +2,7 @@ import React from 'react';
 import RX from 'reactxp';
 import Block from '../components/Block';
 import TimeRow from '../components/TimeRow';
-import config from '../../config';
+import config from '../config';
 import * as cst from '../constants';
 import { getDateDiff, getWidthByTime, getScheduleData } from '../utils';
 

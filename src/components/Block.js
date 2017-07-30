@@ -14,6 +14,7 @@ const styles = {
     textAlign: 'center'
   }),
   timeLine: RX.Styles.createViewStyle({
+    borderStyle: 'solid',
     borderLeftWidth: 4,
     borderLeftColor: 'rgb(40, 44, 52)',
     borderRightWidth: 4,
@@ -23,6 +24,7 @@ const styles = {
   }),
   sessionTitle: RX.Styles.createTextStyle({
     maxHeight: cst.SESSION_HEIGHT,
+    overflow: 'hidden',
     color: '#fff',
     paddingLeft: 3,
     paddingRight: 3
@@ -31,6 +33,7 @@ const styles = {
     height: cst.SESSION_HEIGHT
   }),
   verticalTimeLine: RX.Styles.createViewStyle({
+    borderStyle: 'solid',
     borderLeftWidth: 1,
     borderLeftColor: 'rgba(93, 93, 93, 0.8)',
     zIndex: 1

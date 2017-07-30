@@ -1,4 +1,4 @@
-import config from '../config';
+import config from './config';
 import * as cst from './constants';
 
 // get date time diff in minutes
