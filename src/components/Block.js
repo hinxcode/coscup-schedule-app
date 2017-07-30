@@ -10,7 +10,7 @@ const styles = {
     zIndex: 2
   }),
   sessionTime: RX.Styles.createTextStyle({
-    color: '#DDD',
+    color: '#ddd',
     textAlign: 'center'
   }),
   timeLine: RX.Styles.createViewStyle({
@@ -22,8 +22,10 @@ const styles = {
     borderBottomColor: 'rgb(210, 100, 117)'
   }),
   sessionTitle: RX.Styles.createTextStyle({
-    color: '#FFF',
-    paddingRight: 5
+    maxHeight: cst.SESSION_HEIGHT,
+    color: '#fff',
+    paddingLeft: 3,
+    paddingRight: 3
   }),
   emptyBlock: RX.Styles.createViewStyle({
     height: cst.SESSION_HEIGHT
@@ -40,6 +42,19 @@ const styles = {
     borderRightWidth: 0
   })
 };
+
+const getSubString = (subject, maxWidth) => {
+  if (subject.length > cst.SUBJECT_MIN_LENGTH) {
+    if (maxWidth < 100) {
+      return subject.substring(0, cst.SUBJECT_MIN_LENGTH) +
+             (subject.length > cst.SUBJECT_MIN_LENGTH ? '..' : '')
+    } else {
+      return subject;
+    }
+  } else {
+    return subject;
+  }
+}
 
 const Block = props => {
   return (
@@ -62,13 +77,13 @@ const Block = props => {
       {
         props.isEmpty || props.isEmptyButHasTimeLine
         ? null
-        : <RX.Text style={[ styles.sessionTitle, { width: props.textWidth || props.width } ]}>
+        : <RX.Text style={[
+            styles.sessionTitle,
+            { width: props.textWidth || props.width }
+          ]}>
             {
               props.detail && props.detail.subject
-              ? props.detail.subject.substring(0, cst.SUBJECT_MIN_LENGTH) +
-                (
-                  props.detail.subject.length > cst.SUBJECT_MIN_LENGTH ? '..' : ''
-                )
+              ? getSubString(props.detail.subject, props.textWidth || props.width)
               : null
             }
           </RX.Text>

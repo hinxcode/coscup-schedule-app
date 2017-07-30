@@ -4,14 +4,12 @@ import Block from '../components/Block';
 import TimeRow from '../components/TimeRow';
 import config from '../../config';
 import * as cst from '../constants';
-
-// get date time diff in minutes
-export const getDateDiff = (start, end) => (end.getTime() - start.getTime()) / 1000 / 60;
-export const getWidthByTime = minutes => minutes * cst.HOUR_WIDTH / 60;
+import { getDateDiff, getWidthByTime, getScheduleData } from '../utils';
 
 const styles = {
   scroll: RX.Styles.createScrollViewStyle({
     marginTop: 20,
+    paddingRight: 15,
     flexDirection: 'column',
     alignSelf: 'flex-start',
     backgroundColor: 'rgb(40, 44, 52)'
@@ -29,38 +27,6 @@ const styles = {
     color: cst.ROOM_COL_TITLE_COLOR
   }),
 };
-
-const getScheduleData = async () => {
-  try {
-    const response = await fetch(config.url);
-    const json = await response.json();
-    const result = {};
-
-    for (let i = 0; i < json.length; i++) {
-      const date = new Date(json[i].start).getDate();
-
-      if (!result[date]) {
-        result[date] = {};
-      }
-      if (!result[date][json[i].room]) {
-        result[date][json[i].room] = [];
-      }
-      result[date][json[i].room].push(json[i]);
-    }
-
-    for (let date of Object.keys(result)) {
-      for (let room of Object.keys(result[date])) {
-        result[date][room].sort((a, b) => {
-          return new Date(a.start).getTime() - new Date(b.start).getTime();
-        })
-      }
-    }
-
-    return result;
-  } catch(e) {
-    console.log('Error: ', err);
-  }
-}
 
 const getBlocks = (prev, target) => {
   const blocks = [];
@@ -226,11 +192,19 @@ export default class Schedule extends RX.Component {
           horizontal={ false }
           bounces={ false }
         >
-          <TimeRow hours={['09', '10', '11', '12', '13', '14', '15', '16', '17']} />
+          <TimeRow
+            begin={parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0]}
+            ending={parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0]}
+            minutesPadding={getWidthByTime(60 - config.begin.split(':')[1])}
+          />
           {
             Object.keys(this.state.json).length ? this.getScheduleView() : null
           }
-          <TimeRow hours={['09', '10', '11', '12', '13', '14', '15', '16', '17']} />
+          <TimeRow
+            begin={parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0]}
+            ending={parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0]}
+            minutesPadding={getWidthByTime(60 - config.begin.split(':')[1])}
+          />
         </RX.ScrollView>
       );
     }

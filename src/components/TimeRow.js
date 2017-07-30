@@ -7,22 +7,34 @@ const styles = {
     flexDirection: 'row',
     alignSelf: 'flex-start',
     alignItems: 'center',
-    height: cst.TIME_ROW_HEIGHT,
-    paddingLeft: cst.ROOM_COL_WIDTH
+    height: cst.TIME_ROW_HEIGHT
   }),
   title: RX.Styles.createViewStyle({
     color: cst.TIME_ROW_TITLE_COLOR
   })
 };
 
+const getHours = (begin, ending) => {
+  const hours = [];
+
+  for (let h = parseInt(begin); h < parseInt(ending); h++) {
+    hours.push(h.toString());
+  }
+
+  return hours;
+}
+
 const TimeRow = props => {
   return (
     <RX.View style={[ styles.row ]}>
       {
-        props.hours.map((t, i) =>
+        getHours(props.begin, props.ending).map((t, i) =>
           <RX.View
             key={t}
-            style={{ width: i === props.hours.length - 1 ? cst.HOUR_WIDTH / 2 : cst.HOUR_WIDTH }}
+            style={{
+              width: cst.HOUR_WIDTH,
+              paddingLeft: cst.ROOM_COL_WIDTH + props.minutesPadding - t.length * 3
+            }}
           >
             <RX.Text style={[ styles.title ]}>
               {`${t}`}
@@ -35,7 +47,15 @@ const TimeRow = props => {
 }
 
 TimeRow.propTypes = {
-  hours: PropTypes.array
+  begin: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  ending: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  minutesPadding: PropTypes.number
 }
 
 export default TimeRow;
