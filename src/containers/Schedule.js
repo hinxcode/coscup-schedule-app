@@ -210,26 +210,30 @@ export default class Schedule extends RX.Component {
   render() {
     return (
       <RX.View style={ styles.container }>
-        <RX.ScrollView
-          style={ styles.scroll }
-          vertical={ false }
-          horizontal={ false }
-          bounces={ false }
-        >
-          <TimeRow
-            begin={ parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0] }
-            ending={ parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0] }
-            minutesPadding={ getWidthByTime(60 - config.begin.split(':')[1]) }
-          />
-          {
-            Object.keys(this.props.json).length ? this.getScheduleView() : null
-          }
-          <TimeRow
-            begin={ parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0] }
-            ending={ parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0] }
-            minutesPadding={ getWidthByTime(60 - config.begin.split(':')[1]) }
-          />
-        </RX.ScrollView>
+        {
+          Object.keys(this.props.json).length
+          ? <RX.ScrollView
+              style={ styles.scroll }
+              vertical={ false }
+              horizontal={ false }
+              bounces={ false }
+            >
+              <TimeRow
+                begin={ parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0] }
+                ending={ parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0] }
+                minutesPadding={ getWidthByTime(60 - config.begin.split(':')[1]) }
+              />
+              { this.getScheduleView() }
+              <TimeRow
+                begin={ parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0] }
+                ending={ parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0] }
+                minutesPadding={ getWidthByTime(60 - config.begin.split(':')[1]) }
+              />
+            </RX.ScrollView>
+          : <RX.View style={{ height: '100%', justifyContent: 'center' }}>
+              <RX.ActivityIndicator color={ '#fff' } />
+            </RX.View>
+        }
         <NavBar
           filterName={ this.state.display }
           filterFunc={ v => { this.setState({ display: v }) } }
