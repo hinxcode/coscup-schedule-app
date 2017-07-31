@@ -51,13 +51,18 @@ const styles = {
 };
 
 const getSubString = (subject, maxWidth) => {
-  if (subject.length > cst.SUBJECT_MIN_LENGTH) {
-    if (maxWidth < 100) {
-      return subject.substring(0, cst.SUBJECT_MIN_LENGTH) +
-             (subject.length > cst.SUBJECT_MIN_LENGTH ? '..' : '')
-    } else {
-      return subject;
-    }
+  if (maxWidth < 30) {
+    return subject.substring(0, 5) +
+           (subject.length > 5 ? '..' : '');
+  } else if (maxWidth < 50) {
+    return subject.substring(0, 10) +
+           (subject.length > 10 ? '..' : '');
+  } else if (maxWidth < 100) {
+    return subject.substring(0, 20) +
+           (subject.length > 20 ? '..' : '');
+  } else if (maxWidth < 150) {
+    return subject.substring(0, 30) +
+           (subject.length > 30 ? '..' : '');
   } else {
     return subject;
   }
