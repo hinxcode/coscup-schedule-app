@@ -9,12 +9,6 @@ let NavigationRouteId = {
   Detail: 'DetailPage'
 };
 
-const styles = {
-  navCardStyle: RX.Styles.createViewStyle({
-    backgroundColor: '#f5fcff'
-  })
-};
-
 export default class App extends RX.Component {
   navigator;
 
@@ -29,7 +23,8 @@ export default class App extends RX.Component {
     this.state = {
       json: {},
       dateList: [],
-      date: 0
+      date: 0,
+      detail: {}
     };
 
     StatusBar.setBarStyle('light-content', true);
@@ -57,7 +52,6 @@ export default class App extends RX.Component {
       <RX.Navigator
         ref={ this.onNavigatorRef }
         renderScene={ this.renderScene }
-        cardStyle={ styles.navCardStyle }
       />
     );
   }
@@ -79,23 +73,34 @@ export default class App extends RX.Component {
           />
         );
       case NavigationRouteId.Detail:
-        return <Detail onNavigateBack={ this.onPressBack } />;
+        return (
+          <Detail
+            detail={ this.state.detail }
+            onNavigateBack={ this.onPressBack }
+          />
+        );
     }
 
     return null;
   }
 
-  onPressNavigate() {
+  onPressNavigate(detail) {
+    this.setState({ detail });
+
     this.navigator.push({
       routeId: NavigationRouteId.Detail,
-      sceneConfigType: 'FloatFromRight',
+      sceneConfigType: 'Fade',
       customSceneConfig: {
         hideShadow: true
       }
     });
+
+    StatusBar.setBarStyle('dark-content', true);
   }
 
   onPressBack() {
     this.navigator.pop();
+
+    StatusBar.setBarStyle('light-content', true);
   }
 };
