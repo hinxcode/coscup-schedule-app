@@ -81,12 +81,13 @@ const styles = {
   summaryText: RX.Styles.createTextStyle({
     color: '#cdcdcd',
     lineHeight: 25,
-    fontSize: 15
+    fontSize: 15,
+    paddingBottom: 20
   }),
   aboutBioText: RX.Styles.createTextStyle({
     color: '#a9d589',
     fontSize: 23,
-    paddingTop: 25,
+    paddingTop: 10,
     paddingBottom: 10
   }),
 };
