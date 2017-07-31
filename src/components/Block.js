@@ -44,6 +44,9 @@ const styles = {
   }),
   noRightBorder: RX.Styles.createViewStyle({
     borderRightWidth: 0
+  }),
+  button: RX.Styles.createButtonStyle({
+    overflow: 'visible',
   })
 };
 
@@ -71,32 +74,30 @@ const Block = props => {
         { width: props.width }
       ]}
     >
-      {
-        // props.isEmpty || props.isEmptyButHasTimeLine
-        // ? null
-        // : <RX.Text style={ [styles.sessionTime, { width: props.textWidth || props.width }] }>
-        //     {props.detail ? '8:45~9:15' : null}
-        //   </RX.Text>
-      }
-      {
-        props.isEmpty || props.isEmptyButHasTimeLine
-        ? null
-        : <RX.Text style={[
-            styles.sessionTitle,
-            { width: props.textWidth || props.width }
-          ]}>
-            {
-              props.detail && props.filter && props.detail[props.filter.display]
-              ? getSubString(props.detail[props.filter.display], props.textWidth || props.width)
-              : null
-            }
-          </RX.Text>
-      }
-      {
-        props.isEmpty || props.isEmptyButHasTimeLine
-        ? null
-        : <RX.View style={[ styles.timeLine, { width: props.textWidth || props.width } ]} />
-      }
+      <RX.Button
+        style={[ styles.button ]}
+        onPress={ props.onSessionClick ? props.onSessionClick : () => {} }
+      >
+        {
+          props.isEmpty || props.isEmptyButHasTimeLine
+          ? null
+          : <RX.Text style={[
+              styles.sessionTitle,
+              { width: props.textWidth || props.width }
+            ]}>
+              {
+                props.detail && props.filter && props.detail[props.filter.display]
+                ? getSubString(props.detail[props.filter.display], props.textWidth || props.width)
+                : null
+              }
+            </RX.Text>
+        }
+        {
+          props.isEmpty || props.isEmptyButHasTimeLine
+          ? null
+          : <RX.View style={[ styles.timeLine, { width: props.textWidth || props.width } ]} />
+        }
+      </RX.Button>
     </RX.View>
   );
 }
@@ -108,7 +109,8 @@ Block.propTypes = {
   filter: PropTypes.object,
   isEmpty: PropTypes.bool,
   isEmptyButHasTimeLine: PropTypes.bool,
-  isOClock: PropTypes.bool
+  isOClock: PropTypes.bool,
+  onSessionClick: PropTypes.func
 }
 
 export default Block;

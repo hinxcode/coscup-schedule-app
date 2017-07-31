@@ -14,7 +14,7 @@ const styles = {
     backgroundColor: cst.BACKGROUND_COLOR
   }),
   scroll: RX.Styles.createScrollViewStyle({
-    marginTop: 20,
+    marginTop: cst.STATUS_BAR_HEIGHT,
     paddingRight: 15,
     flexDirection: 'column',
     alignSelf: 'center'
@@ -30,109 +30,8 @@ const styles = {
   }),
   roomTitle: RX.Styles.createViewStyle({
     color: cst.ROOM_COL_TITLE_COLOR
-  }),
+  })
 };
-
-const getBlocks = (prev, target, filter) => {
-  const blocks = [];
-  let prevEnd;
-
-  if (prev === null) {
-    prevEnd = new Date(target.start);
-    prevEnd.setHours(config.begin.split(':')[0]);
-    prevEnd.setMinutes(config.begin.split(':')[1]);
-  } else {
-    prevEnd = new Date(prev.end);
-  }
-
-  const curStart = new Date(target.start);
-  const curEnd = new Date(target.end);
-  const breakTime = getDateDiff(prevEnd, curStart);
-  const sessionTime = getDateDiff(curStart, curEnd);
-
-  if (breakTime > 0) {
-    if (prevEnd.getMinutes() + breakTime > 60) {
-      blocks.push(
-        <Block
-          width={ getWidthByTime(60 - prevEnd.getMinutes()) }
-          isEmpty
-          isOClock={ prevEnd.getMinutes() === 0 }
-        />
-      );
-      for (let n = 1; n < Math.floor((prevEnd.getMinutes() + breakTime) / 60); n++) {
-        blocks.push(
-          <Block
-            width={ getWidthByTime(60) }
-            isEmpty
-            isOClock
-          />
-        );
-      }
-      if ((prevEnd.getMinutes() + breakTime) % 60 > 0) {
-        blocks.push(
-          <Block
-            width={ getWidthByTime((prevEnd.getMinutes() + breakTime) % 60) }
-            isEmpty
-            isOClock
-          />
-        );
-      }
-    } else {
-      blocks.push(
-        <Block
-          width={ getWidthByTime(breakTime) }
-          isEmpty
-          isOClock={ prevEnd.getMinutes() === 0 }
-        />
-      );
-    }
-  }
-
-  if (sessionTime > 0) {
-    if (curStart.getMinutes() + sessionTime > 60) {
-      blocks.push(
-        <Block
-          width={ getWidthByTime(60 - curStart.getMinutes()) }
-          textWidth={ getWidthByTime(sessionTime) }
-          detail={ target }
-          filter={ filter }
-          hasNoRightBound
-          isOClock={ curStart.getMinutes() === 0 }
-        />
-      );
-      for (let n = 1; n < Math.floor((curStart.getMinutes() + sessionTime) / 60); n++) {
-        blocks.push(
-          <Block
-            width={ getWidthByTime(60) }
-            isEmptyButHasTimeLine
-            hasNoRightBound
-            isOClock
-          />
-        );
-      }
-      if ((curStart.getMinutes() + sessionTime) % 60 > 0) {
-        blocks.push(
-          <Block
-            width={ getWidthByTime((curStart.getMinutes() + sessionTime) % 60) }
-            isEmptyButHasTimeLine
-            isOClock
-          />
-        );
-      }
-    } else {
-      blocks.push(
-        <Block
-          width={ getWidthByTime(sessionTime) }
-          detail={ target }
-          filter={ filter }
-          isOClock={ curStart.getMinutes() === 0 }
-        />
-      );
-    }
-  }
-
-  return blocks;
-}
 
 export default class Schedule extends RX.Component {
   constructor(props) {
@@ -142,6 +41,109 @@ export default class Schedule extends RX.Component {
       pickedDate: 0,  // temp state for date picker
       display: 'subject'
     };
+  }
+
+  getBlocks(prev, target, filter) {
+    const blocks = [];
+    let prevEnd;
+
+    if (prev === null) {
+      prevEnd = new Date(target.start);
+      prevEnd.setHours(config.begin.split(':')[0]);
+      prevEnd.setMinutes(config.begin.split(':')[1]);
+    } else {
+      prevEnd = new Date(prev.end);
+    }
+
+    const curStart = new Date(target.start);
+    const curEnd = new Date(target.end);
+    const breakTime = getDateDiff(prevEnd, curStart);
+    const sessionTime = getDateDiff(curStart, curEnd);
+
+    if (breakTime > 0) {
+      if (prevEnd.getMinutes() + breakTime > 60) {
+        blocks.push(
+          <Block
+            width={ getWidthByTime(60 - prevEnd.getMinutes()) }
+            isEmpty
+            isOClock={ prevEnd.getMinutes() === 0 }
+          />
+        );
+        for (let n = 1; n < Math.floor((prevEnd.getMinutes() + breakTime) / 60); n++) {
+          blocks.push(
+            <Block
+              width={ getWidthByTime(60) }
+              isEmpty
+              isOClock
+            />
+          );
+        }
+        if ((prevEnd.getMinutes() + breakTime) % 60 > 0) {
+          blocks.push(
+            <Block
+              width={ getWidthByTime((prevEnd.getMinutes() + breakTime) % 60) }
+              isEmpty
+              isOClock
+            />
+          );
+        }
+      } else {
+        blocks.push(
+          <Block
+            width={ getWidthByTime(breakTime) }
+            isEmpty
+            isOClock={ prevEnd.getMinutes() === 0 }
+          />
+        );
+      }
+    }
+
+    if (sessionTime > 0) {
+      if (curStart.getMinutes() + sessionTime > 60) {
+        blocks.push(
+          <Block
+            width={ getWidthByTime(60 - curStart.getMinutes()) }
+            textWidth={ getWidthByTime(sessionTime) }
+            detail={ target }
+            filter={ filter }
+            hasNoRightBound
+            isOClock={ curStart.getMinutes() === 0 }
+            onSessionClick={ () => { this.props.onPressNavigate(target) } }
+          />
+        );
+        for (let n = 1; n < Math.floor((curStart.getMinutes() + sessionTime) / 60); n++) {
+          blocks.push(
+            <Block
+              width={ getWidthByTime(60) }
+              isEmptyButHasTimeLine
+              hasNoRightBound
+              isOClock
+            />
+          );
+        }
+        if ((curStart.getMinutes() + sessionTime) % 60 > 0) {
+          blocks.push(
+            <Block
+              width={ getWidthByTime((curStart.getMinutes() + sessionTime) % 60) }
+              isEmptyButHasTimeLine
+              isOClock
+            />
+          );
+        }
+      } else {
+        blocks.push(
+          <Block
+            width={ getWidthByTime(sessionTime) }
+            detail={ target }
+            filter={ filter }
+            isOClock={ curStart.getMinutes() === 0 }
+            onSessionClick={ () => { this.props.onPressNavigate(target) } }
+          />
+        );
+      }
+    }
+
+    return blocks;
   }
 
   getScheduleView() {
@@ -156,9 +158,9 @@ export default class Schedule extends RX.Component {
     for (let room of Object.keys(data)) {
       for (let i = 0; i < data[room].length; i++) {
         if (i < 1) {
-          columns.push(getBlocks(null, data[room][i], filter));
+          columns.push(this.getBlocks(null, data[room][i], filter));
         } else {
-          columns.push(getBlocks(data[room][i - 1], data[room][i], filter));
+          columns.push(this.getBlocks(data[room][i - 1], data[room][i], filter));
         }
       }
 
@@ -168,7 +170,7 @@ export default class Schedule extends RX.Component {
       ending.setMinutes(config.ending.split(':')[1]);
 
       if (getDateDiff(new Date(data[room][data[room].length - 1].end), ending) > 60) {
-        columns.push(getBlocks(data[room][data[room].length - 1], { start: ending, end: ending }, filter));
+        columns.push(this.getBlocks(data[room][data[room].length - 1], { start: ending, end: ending }, filter));
       }
 
       result.push(
