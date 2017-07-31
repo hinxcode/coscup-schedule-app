@@ -6,7 +6,7 @@ import NavBar from '../components/NavBar';
 import Modals from '../components/modals';
 import config from '../config';
 import * as cst from '../constants';
-import { getDateDiff, getWidthByTime, getScheduleData, getPickerItems } from '../utils';
+import { getDateDiff, getWidthByTime, getPickerItems } from '../utils';
 
 const styles = {
   container: RX.Styles.createViewStyle({
@@ -139,29 +139,17 @@ export default class Schedule extends RX.Component {
     super(props);
 
     this.state = {
-      json: [],
-      date: 0,
       pickedDate: 0,  // temp state for date picker
       display: 'subject'
     };
   }
 
-  componentDidMount() {
-    getScheduleData().then(res => {
-      this.setState({
-        json: res,
-        dateList: Object.keys(res),
-        date: Object.keys(res)[0]
-      });
-    })
-  }
-
   getScheduleView() {
     const filter = {
-      date: this.state.date || Object.keys(this.state.json)[0],
+      date: this.props.date || Object.keys(this.props.json)[0],
       display: this.state.display
     }
-    const data = this.state.json[filter.date];
+    const data = this.props.json[filter.date];
     const result = [];
     let columns = [];
 
@@ -206,13 +194,13 @@ export default class Schedule extends RX.Component {
       default:
         RX.Modal.show(
           <Modals.DatePicker
-            items={ getPickerItems(this.state.dateList) }
-            initDate={ this.state.date }
+            items={ getPickerItems(this.props.dateList) }
+            initDate={ this.props.date }
             onPickerChange={ v => { this.setState({ pickedDate: v }) } }
-            onConfirm={() => {
-              this.setState({ date: this.state.pickedDate });
+            onConfirm={ () => {
+              this.props.onChangeDate(this.state.pickedDate);
               RX.Modal.dismiss(modalId);
-            }}
+            } }
           />, modalId);
     }
   }
@@ -232,7 +220,7 @@ export default class Schedule extends RX.Component {
             minutesPadding={ getWidthByTime(60 - config.begin.split(':')[1]) }
           />
           {
-            Object.keys(this.state.json).length ? this.getScheduleView() : null
+            Object.keys(this.props.json).length ? this.getScheduleView() : null
           }
           <TimeRow
             begin={ parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0] }

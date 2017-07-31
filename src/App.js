@@ -2,10 +2,11 @@ import React from 'react';
 import RX, { StatusBar } from 'reactxp';
 import Schedule from './containers/Schedule';
 import Detail from './containers/Detail';
+import { getScheduleData } from './utils';
 
 let NavigationRouteId = {
-  Schedule: 'Schedule',
-  Detail: 'Detail'
+  Schedule: 'SchedulePage',
+  Detail: 'DetailPage'
 };
 
 const styles = {
@@ -15,21 +16,37 @@ const styles = {
 };
 
 export default class App extends RX.Component {
-  _navigator;
+  navigator;
 
   constructor(props) {
     super(props);
 
-    this._onNavigatorRef = this._onNavigatorRef.bind(this);
-    this._renderScene = this._renderScene.bind(this);
-    this._onPressNavigate = this._onPressNavigate.bind(this);
-    this._onPressBack = this._onPressBack.bind(this);
+    this.onNavigatorRef = this.onNavigatorRef.bind(this);
+    this.renderScene = this.renderScene.bind(this);
+    this.onPressNavigate = this.onPressNavigate.bind(this);
+    this.onPressBack = this.onPressBack.bind(this);
+
+    this.state = {
+      json: {},
+      dateList: [],
+      date: 0
+    };
 
     StatusBar.setBarStyle('light-content', true);
   }
 
   componentDidMount() {
-    this._navigator.immediatelyResetRouteStack([{
+    getScheduleData().then(res => {
+      this.setState({
+        json: res,
+        dateList: Object.keys(res),
+        date: Object.keys(res)[0]
+      });
+    }).catch(err => {
+      RX.Alert.show('錯誤', `議程表資料下載失敗。`);
+    });
+
+    this.navigator.immediatelyResetRouteStack([{
       routeId: NavigationRouteId.Schedule,
       sceneConfigType: 'Fade'
     }]);
@@ -38,40 +55,47 @@ export default class App extends RX.Component {
   render() {
     return (
       <RX.Navigator
-        ref={ this._onNavigatorRef }
-        renderScene={ this._renderScene }
+        ref={ this.onNavigatorRef }
+        renderScene={ this.renderScene }
         cardStyle={ styles.navCardStyle }
       />
     );
   }
 
-  _onNavigatorRef(navigator) {
-    this._navigator = navigator;
+  onNavigatorRef(navigator) {
+    this.navigator = navigator;
   }
 
-  _renderScene(navigatorRoute) {
+  renderScene(navigatorRoute) {
     switch (navigatorRoute.routeId) {
       case NavigationRouteId.Schedule:
-        return <Schedule onPressNavigate={ this._onPressNavigate } />;
-
+        return (
+          <Schedule
+            json={ this.state.json }
+            dateList={ this.state.dateList }
+            date={ this.state.date }
+            onChangeDate={ d => { this.setState({ date: d }) } }
+            onPressNavigate={ this.onPressNavigate }
+          />
+        );
       case NavigationRouteId.Detail:
-        return <Detail onNavigateBack={ this._onPressBack } />;
+        return <Detail onNavigateBack={ this.onPressBack } />;
     }
 
     return null;
   }
 
-  _onPressNavigate() {
-    this._navigator.push({
+  onPressNavigate() {
+    this.navigator.push({
       routeId: NavigationRouteId.Detail,
-      sceneConfigType: "FloatFromRight",
+      sceneConfigType: 'FloatFromRight',
       customSceneConfig: {
         hideShadow: true
       }
     });
   }
 
-  _onPressBack() {
-    this._navigator.pop();
+  onPressBack() {
+    this.navigator.pop();
   }
 };
