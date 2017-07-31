@@ -35,7 +35,7 @@ const NavBar = props => {
     <RX.View style={ styles.bar }>
       <RX.Button
         style={[ styles.button, props.filterName === 'subject' ? {} : styles.isInactive ]}
-        onPress={() => props.onClick('subject')}
+        onPress={() => props.filterFunc('subject')}
       >
         <RX.Image
           style={ styles.icon }
@@ -47,8 +47,18 @@ const NavBar = props => {
         </RX.Text>
       </RX.Button>
       <RX.Button
+        style={[ styles.button ]}
+        onPress={() => props.modalFunc(cst.MODAL_DATE_PICKER)}
+      >
+        <RX.Image
+          style={ styles.icon }
+          source={ iconScheduleTime }
+          resizeMode={ 'cover' }
+        />
+      </RX.Button>
+      <RX.Button
         style={[ styles.button, props.filterName === 'time' ? {} : styles.isInactive ]}
-        onPress={() => props.onClick('time')}
+        onPress={() => props.filterFunc('time')}
       >
         <RX.Image
           style={ styles.icon }
@@ -64,8 +74,9 @@ const NavBar = props => {
 }
 
 NavBar.propTypes = {
-  onClick: PropTypes.func,
-  filterName: PropTypes.string
+  filterName: PropTypes.string,
+  filterFunc: PropTypes.func,
+  modalFunc: PropTypes.func
 }
 
 export default NavBar;

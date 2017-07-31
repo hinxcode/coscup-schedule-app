@@ -39,3 +39,8 @@ export const getScheduleData = async () => {
     console.log('Error: ', err);
   }
 }
+
+export const getPickerItems = dateList => dateList.map((d, i) => ({
+  label: `第 ${(i + 1).toString()} 天`,
+  value: d
+}));
