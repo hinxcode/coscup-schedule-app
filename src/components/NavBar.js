@@ -28,8 +28,8 @@ const styles = {
     marginBottom: 3
   }),
   iconMenu: RX.Styles.createImageStyle({
-    height: 33,
-    width: 33
+    height: 28,
+    width: 28
   }),
   buttonText: RX.Styles.createTextStyle({
     fontSize: 12
@@ -44,20 +44,18 @@ const NavBar = props => {
     <RX.View style={ styles.bar }>
       <RX.Button
         style={[ styles.button, props.filterName === 'subject' ? {} : styles.isInactive ]}
-        onPress={() => props.filterFunc('subject')}
+        onPress={ () => props.filterFunc('subject') }
       >
         <RX.Image
           style={ styles.iconSchedule }
           source={ iconSchedule }
           resizeMode={ 'cover' }
         />
-        <RX.Text style={ styles.buttonText }>
-           主題
-        </RX.Text>
+        <RX.Text style={ styles.buttonText }>主題</RX.Text>
       </RX.Button>
       <RX.Button
         style={[ styles.button ]}
-        onPress={() => props.modalFunc(cst.MODAL_DATE_PICKER)}
+        onPress={ () => props.modalFunc(cst.MODAL_DATE_PICKER) }
       >
         <RX.Image
           style={ styles.iconMenu }
@@ -67,16 +65,14 @@ const NavBar = props => {
       </RX.Button>
       <RX.Button
         style={[ styles.button, props.filterName === 'time' ? {} : styles.isInactive ]}
-        onPress={() => props.filterFunc('time')}
+        onPress={ () => props.filterFunc('time') }
       >
         <RX.Image
           style={ styles.iconScheduleTime }
           source={ iconScheduleTime }
           resizeMode={ 'cover' }
         />
-        <RX.Text style={ styles.buttonText }>
-           時間
-        </RX.Text>
+        <RX.Text style={ styles.buttonText }>時間</RX.Text>
       </RX.Button>
     </RX.View>
   );
