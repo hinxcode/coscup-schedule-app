@@ -4,6 +4,7 @@ import RX from 'reactxp';
 import * as cst from '../constants';
 import iconScheduleTime from '../img/schedule_time.png';
 import iconSchedule from '../img/schedule.png';
+import iconMenu from '../img/menu.png';
 
 const styles = {
   bar: RX.Styles.createViewStyle({
@@ -17,12 +18,20 @@ const styles = {
     alignItems: 'center',
     width: 100,
   }),
-  icon: RX.Styles.createImageStyle({
-    height: 25,
-    width: 25
+  iconSchedule: RX.Styles.createImageStyle({
+    height: 30,
+    width: 30
+  }),
+  iconScheduleTime: RX.Styles.createImageStyle({
+    height: 24,
+    width: 24,
+    marginBottom: 3
+  }),
+  iconMenu: RX.Styles.createImageStyle({
+    height: 33,
+    width: 33
   }),
   buttonText: RX.Styles.createTextStyle({
-    paddingTop: 3,
     fontSize: 12
   }),
   isInactive: RX.Styles.createViewStyle({
@@ -38,7 +47,7 @@ const NavBar = props => {
         onPress={() => props.filterFunc('subject')}
       >
         <RX.Image
-          style={ styles.icon }
+          style={ styles.iconSchedule }
           source={ iconSchedule }
           resizeMode={ 'cover' }
         />
@@ -51,8 +60,8 @@ const NavBar = props => {
         onPress={() => props.modalFunc(cst.MODAL_DATE_PICKER)}
       >
         <RX.Image
-          style={ styles.icon }
-          source={ iconScheduleTime }
+          style={ styles.iconMenu }
+          source={ iconMenu }
           resizeMode={ 'cover' }
         />
       </RX.Button>
@@ -61,7 +70,7 @@ const NavBar = props => {
         onPress={() => props.filterFunc('time')}
       >
         <RX.Image
-          style={ styles.icon }
+          style={ styles.iconScheduleTime }
           source={ iconScheduleTime }
           resizeMode={ 'cover' }
         />
