@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import RX from 'reactxp';
 import * as cst from '../../constants';
 
@@ -30,7 +29,7 @@ export default class DatePicker extends RX.Component {
 
     this.state = {
       date: props.initDate
-    }
+    };
   }
 
   onChange(value, index) {
@@ -54,9 +53,7 @@ export default class DatePicker extends RX.Component {
           style={ styles.button }
           onPress={ () => this.props.onConfirm(this.state.date) }
         >
-          <RX.Text style={ styles.buttonText }>
-            確定
-          </RX.Text>
+          <RX.Text style={ styles.buttonText }>確定</RX.Text>
         </RX.Button>
       </RX.View>
     );
