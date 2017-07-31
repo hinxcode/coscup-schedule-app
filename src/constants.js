@@ -3,7 +3,6 @@ export const TIME_ROW_HEIGHT = 35;
 export const HOUR_WIDTH = 170;  // in minutes
 export const ROOM_COL_WIDTH = 50;
 export const SESSION_HEIGHT = 90;
-export const SUBJECT_MIN_LENGTH = 15;
 export const STATUS_BAR_HEIGHT = 20;
 export const BACKGROUND_COLOR = '#282c34';
 export const DETAIL_HEADER_COLOR = '#f6f6f6';
