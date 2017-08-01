@@ -11,7 +11,8 @@ import { getDateDiff, getWidthByTime, getPickerItems } from '../utils';
 const styles = {
   container: RX.Styles.createViewStyle({
     flex: 1,
-    backgroundColor: cst.BACKGROUND_COLOR
+    backgroundColor: cst.BACKGROUND_COLOR,
+    overflow: 'scroll'
   }),
   scroll: RX.Styles.createScrollViewStyle({
     marginTop: cst.STATUS_BAR_HEIGHT,
