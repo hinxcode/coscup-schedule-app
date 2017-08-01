@@ -33,11 +33,11 @@ export default class DatePicker extends RX.Component {
   }
 
   onChange(value, index) {
+    this.props.onPickerChange(value);
+
     this.setState({
       date: value
     });
-
-    this.props.onPickerChange(value);
   }
 
   render() {
@@ -51,7 +51,7 @@ export default class DatePicker extends RX.Component {
         />
         <RX.Button
           style={ styles.button }
-          onPress={ () => this.props.onConfirm(this.state.date) }
+          onPress={ () => this.props.onConfirm() }
         >
           <RX.Text style={ styles.buttonText }>確定</RX.Text>
         </RX.Button>

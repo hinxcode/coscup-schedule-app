@@ -38,7 +38,7 @@ export default class Schedule extends RX.Component {
     super(props);
 
     this.state = {
-      pickedDate: 0,  // temp state for date picker
+      date: 0,
       display: 'subject'
     };
   }
@@ -118,6 +118,7 @@ export default class Schedule extends RX.Component {
               isEmptyButHasTimeLine
               hasNoRightBound
               isOClock
+              onSessionClick={ () => { this.props.onPressNavigate(target) } }
             />
           );
         }
@@ -127,6 +128,7 @@ export default class Schedule extends RX.Component {
               width={ getWidthByTime((curStart.getMinutes() + sessionTime) % 60) }
               isEmptyButHasTimeLine
               isOClock
+              onSessionClick={ () => { this.props.onPressNavigate(target) } }
             />
           );
         }
@@ -148,7 +150,7 @@ export default class Schedule extends RX.Component {
 
   getScheduleView() {
     const filter = {
-      date: this.props.date || Object.keys(this.props.json)[0],
+      date: this.state.date || Object.keys(this.props.json)[0],
       display: this.state.display
     }
     const data = this.props.json[filter.date];
@@ -193,16 +195,12 @@ export default class Schedule extends RX.Component {
   onShowModal(modalId) {
     switch (modalId) {
       case cst.MODAL_DATE_PICKER:
-      default:
         RX.Modal.show(
           <Modals.DatePicker
             items={ getPickerItems(this.props.dateList) }
-            initDate={ this.props.date }
-            onPickerChange={ v => { this.setState({ pickedDate: v }) } }
-            onConfirm={ () => {
-              this.props.onChangeDate(this.state.pickedDate);
-              RX.Modal.dismiss(modalId);
-            } }
+            initDate={ this.state.date }
+            onPickerChange={ v => { this.setState({ date: v }) } }
+            onConfirm={ () => { RX.Modal.dismiss(modalId) } }
           />, modalId);
     }
   }
@@ -213,22 +211,28 @@ export default class Schedule extends RX.Component {
         {
           Object.keys(this.props.json).length
           ? <RX.ScrollView
-              style={ styles.scroll }
               vertical={ false }
-              horizontal={ false }
+              horizontal={ true }
               bounces={ false }
             >
-              <TimeRow
-                begin={ parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0] }
-                ending={ parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0] }
-                minutesPadding={ getWidthByTime(60 - config.begin.split(':')[1]) }
-              />
-              { this.getScheduleView() }
-              <TimeRow
-                begin={ parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0] }
-                ending={ parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0] }
-                minutesPadding={ getWidthByTime(60 - config.begin.split(':')[1]) }
-              />
+              <RX.ScrollView
+                style={ styles.scroll }
+                vertical={ true }
+                horizontal={ false }
+                bounces={ false }
+              >
+                <TimeRow
+                  begin={ parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0] }
+                  ending={ parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0] }
+                  minutesPadding={ getWidthByTime(60 - config.begin.split(':')[1]) }
+                />
+                { this.getScheduleView() }
+                <TimeRow
+                  begin={ parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0] }
+                  ending={ parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0] }
+                  minutesPadding={ getWidthByTime(60 - config.begin.split(':')[1]) }
+                />
+              </RX.ScrollView>
             </RX.ScrollView>
           : <RX.View style={{ height: '100%', justifyContent: 'center' }}>
               <RX.ActivityIndicator color={ '#fff' } />

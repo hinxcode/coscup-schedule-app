@@ -2,6 +2,7 @@ import React from 'react';
 import RX, { StatusBar } from 'reactxp';
 import Schedule from './containers/Schedule';
 import Detail from './containers/Detail';
+import * as cst from './constants';
 import { getScheduleData } from './utils';
 
 const NavigationRouteId = {
@@ -18,7 +19,7 @@ export default class App extends RX.Component {
     this.state = {
       json: {},
       dateList: [],
-      date: 0,
+      initDate: 0,
       detail: {}
     };
 
@@ -30,7 +31,7 @@ export default class App extends RX.Component {
       this.setState({
         json: res,
         dateList: Object.keys(res),
-        date: Object.keys(res)[0]
+        initDate: Object.keys(res)[0]
       });
     }).catch(err => {
       RX.Alert.show('錯誤', `議程表資料下載失敗。`);
@@ -38,7 +39,7 @@ export default class App extends RX.Component {
 
     this.navigator.immediatelyResetRouteStack([{
       routeId: NavigationRouteId.Schedule,
-      sceneConfigType: 'Fade'
+      sceneConfigType: 'FloatFromLeft'
     }]);
   }
 
@@ -47,6 +48,9 @@ export default class App extends RX.Component {
       <RX.Navigator
         ref={ ref => { this.navigator = ref } }
         renderScene={ route => this.renderScene(route) }
+        cardStyle={{
+          backgroundColor: cst.BACKGROUND_COLOR
+        }}
       />
     );
   }
@@ -58,8 +62,7 @@ export default class App extends RX.Component {
           <Schedule
             json={ this.state.json }
             dateList={ this.state.dateList }
-            date={ this.state.date }
-            onChangeDate={ d => { this.setState({ date: d }) } }
+            initDate={ this.state.initDate }
             onPressNavigate={ detail => { this.onPressNavigate(detail) } }
           />
         );
@@ -80,7 +83,7 @@ export default class App extends RX.Component {
 
     this.navigator.push({
       routeId: NavigationRouteId.Detail,
-      sceneConfigType: 'Fade',
+      sceneConfigType: 'FloatFromLeft',
       customSceneConfig: {
         hideShadow: true
       }
