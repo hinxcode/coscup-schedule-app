@@ -4,7 +4,7 @@ import Schedule from './containers/Schedule';
 import Detail from './containers/Detail';
 import { getScheduleData } from './utils';
 
-let NavigationRouteId = {
+const NavigationRouteId = {
   Schedule: 'SchedulePage',
   Detail: 'DetailPage'
 };
@@ -14,11 +14,6 @@ export default class App extends RX.Component {
 
   constructor(props) {
     super(props);
-
-    this.onNavigatorRef = this.onNavigatorRef.bind(this);
-    this.renderScene = this.renderScene.bind(this);
-    this.onPressNavigate = this.onPressNavigate.bind(this);
-    this.onPressBack = this.onPressBack.bind(this);
 
     this.state = {
       json: {},
@@ -50,14 +45,10 @@ export default class App extends RX.Component {
   render() {
     return (
       <RX.Navigator
-        ref={ this.onNavigatorRef }
-        renderScene={ this.renderScene }
+        ref={ ref => { this.navigator = ref } }
+        renderScene={ route => this.renderScene(route) }
       />
     );
-  }
-
-  onNavigatorRef(navigator) {
-    this.navigator = navigator;
   }
 
   renderScene(navigatorRoute) {
@@ -69,14 +60,14 @@ export default class App extends RX.Component {
             dateList={ this.state.dateList }
             date={ this.state.date }
             onChangeDate={ d => { this.setState({ date: d }) } }
-            onPressNavigate={ this.onPressNavigate }
+            onPressNavigate={ detail => { this.onPressNavigate(detail) } }
           />
         );
       case NavigationRouteId.Detail:
         return (
           <Detail
             detail={ this.state.detail }
-            onNavigateBack={ this.onPressBack }
+            onNavigateBack={ () => { this.onPressBack() } }
           />
         );
     }
