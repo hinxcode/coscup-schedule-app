@@ -1,4 +1,4 @@
-package com.coscup;
+package com.hinxcode.coscup;
 
 import com.facebook.react.ReactActivity;
 
