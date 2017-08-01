@@ -1,4 +1,4 @@
-package com.coscup;
+package com.hinxcode.coscup;
 
 import android.app.Application;
 
