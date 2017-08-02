@@ -45,7 +45,7 @@ const styles = {
   }),
   timeInfo: RX.Styles.createViewStyle({
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'flex-end'
   }),
   langText: RX.Styles.createTextStyle({
     color: cst.ROOM_COL_TITLE_COLOR,
@@ -66,11 +66,11 @@ const styles = {
   timeText: RX.Styles.createTextStyle({
     color: '#64aedf',
     fontSize: 18,
-    paddingRight: 5
+    paddingRight: 10
   }),
   timeDiffText: RX.Styles.createTextStyle({
     color: '#de6875',
-    fontSize: 16
+    fontSize: 15
   }),
   subjectText: RX.Styles.createTextStyle({
     color: '#dfdfdf',
@@ -95,10 +95,10 @@ const styles = {
 export default class Detail extends RX.Component {
   render() {
     const {
+      speaker,
       room,
       subject,
       lang,
-      speaker,
       summary,
       time,
       start,
@@ -116,32 +116,39 @@ export default class Detail extends RX.Component {
           <RX.View style={ styles.speakerView }>
             <RX.Image
               style={ styles.avatar }
-              source={ speaker.avatar }
+              source={ speaker && speaker.avatar }
               resizeMode={ 'cover' }
             />
             <RX.View style={ styles.speakerInfo }>
-              <RX.Text style={ styles.langText}>{ lang }</RX.Text>
-              <RX.Text style={ styles.nameText}>{ speaker.name }</RX.Text>
+              <RX.Text style={ styles.langText }>{ lang }</RX.Text>
+              <RX.Text style={ styles.nameText }>{ speaker && speaker.name }</RX.Text>
             </RX.View>
           </RX.View>
-          <RX.Text style={ styles.subjectText}>{ subject }</RX.Text>
+          <RX.View>
+            <RX.Text style={ styles.subjectText }>{ subject }</RX.Text>
+          </RX.View>
           <RX.View style={ styles.sessionInfo }>
-            <RX.Text style={ styles.roomText}>{ `ROOM ${room}` }</RX.Text>
+            <RX.Text style={ styles.roomText }>{ `ROOM ${room}` }</RX.Text>
             <RX.View style={ styles.timeInfo }>
-              <RX.Text style={ styles.timeText}>
+              <RX.Text style={ styles.timeText }>
                 { time }
               </RX.Text>
-              <RX.Text style={ styles.timeDiffText}>
-                { `(${getDateDiff(new Date(start), new Date(end))})` }
+              <RX.Text style={ styles.timeDiffText }>
+                { `${getDateDiff(new Date(start), new Date(end))} mins` }
               </RX.Text>
             </RX.View>
           </RX.View>
-          <RX.Text style={ styles.summaryText}>{ summary }</RX.Text>
-          <RX.Text style={ styles.summaryText}>{ summary }</RX.Text>
-          {
-            speaker.bio ? <RX.Text style={ styles.aboutBioText}>關於講者</RX.Text> : null
-          }
-          <RX.Text style={ styles.summaryText}>{ speaker.bio }</RX.Text>
+          <RX.View>
+            <RX.Text style={ styles.summaryText }>{ summary }</RX.Text>
+          </RX.View>
+          <RX.View>
+            {
+              speaker && speaker.bio ? <RX.Text style={ styles.aboutBioText }>關於講者</RX.Text> : null
+            }
+          </RX.View>
+          <RX.View>
+            <RX.Text style={ styles.summaryText }>{ speaker && speaker.bio }</RX.Text>
+          </RX.View>
         </RX.ScrollView>
       </RX.View>
     );

@@ -5,10 +5,11 @@ import * as cst from '../constants';
 
 const styles = {
   row: RX.Styles.createViewStyle({
+    height: cst.TIME_ROW_HEIGHT,
     flexDirection: 'row',
     alignSelf: 'flex-start',
     alignItems: 'center',
-    height: cst.TIME_ROW_HEIGHT
+    overflow: 'visible'
   }),
   title: RX.Styles.createViewStyle({
     color: cst.TIME_ROW_TITLE_COLOR

@@ -6,20 +6,21 @@ const styles = {
   modal: RX.Styles.createViewStyle({
     backgroundColor: '#fff',
     borderRadius: 3,
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: 10
   }),
   picker: RX.Styles.createPickerStyle({
     width: 200
   }),
   button: RX.Styles.createButtonStyle({
     paddingTop: 10,
-    paddingBottom: 15,
+    paddingBottom: 10,
     paddingLeft: 100,
     paddingRight: 100
   }),
   buttonText: RX.Styles.createTextStyle({
-    fontSize: 15,
-    color: cst.BACKGROUND_COLOR
+    color: cst.BACKGROUND_COLOR,
+    fontSize: 15
   }),
 };
 

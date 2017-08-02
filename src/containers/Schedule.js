@@ -7,21 +7,29 @@ import Modals from '../components/modals';
 import config from '../config';
 import * as cst from '../constants';
 import { getDateDiff, getWidthByTime, getPickerItems } from '../utils';
+import iconReload from '../img/reload.png';
 
 const styles = {
   container: RX.Styles.createViewStyle({
     flex: 1,
     backgroundColor: cst.BACKGROUND_COLOR
   }),
-  scroll: RX.Styles.createScrollViewStyle({
-    marginTop: cst.STATUS_BAR_HEIGHT,
-    paddingRight: 15,
-    flexDirection: 'column',
+  iconContainer: RX.Styles.createViewStyle({
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: cst.BACKGROUND_COLOR
+  }),
+  scrollX: RX.Styles.createScrollViewStyle({
     alignSelf: 'center'
+  }),
+  scrollY: RX.Styles.createScrollViewStyle({
+    marginTop: cst.STATUS_BAR_HEIGHT
   }),
   row: RX.Styles.createViewStyle({
     flexDirection: 'row',
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
+    overflow: 'visible'
   }),
   roomBlock: RX.Styles.createViewStyle({
     width: cst.ROOM_COL_WIDTH,
@@ -30,6 +38,10 @@ const styles = {
   }),
   roomTitle: RX.Styles.createViewStyle({
     color: cst.ROOM_COL_TITLE_COLOR
+  }),
+  reloadText: RX.Styles.createViewStyle({
+    color: cst.ROOM_COL_TITLE_COLOR,
+    paddingTop: 10
   })
 };
 
@@ -206,44 +218,68 @@ export default class Schedule extends RX.Component {
   }
 
   render() {
-    return (
-      <RX.View style={ styles.container }>
-        {
-          Object.keys(this.props.json).length
-          ? <RX.ScrollView
-              vertical={ false }
-              horizontal={ true }
-              bounces={ false }
+    if (this.props.isDownloading) {
+      return (
+        <RX.View style={ styles.iconContainer }>
+          <RX.ActivityIndicator color={ '#fff' } />
+        </RX.View>
+      );
+    } else if (Object.keys(this.props.json).length > 0) {
+      return (
+        <RX.View style={ styles.container }>
+          <RX.ScrollView
+            style={[ styles.scrollY, RX.Platform.getType() === 'web' && { overflowY: 'visible' } ]}
+            vertical={ false }
+            horizontal
+            bounces={ false }
+            onScrollBeginDrag={ () => {} }
+            onScrollEndDrag={ () => {} }
+          >
+            <RX.ScrollView
+              style={[ styles.scrollX, RX.Platform.getType() === 'web' && { overflowX: 'visible' } ]}
+              vertical
+              horizontal={ false }
+              bounces
+              onScrollBeginDrag={ () => {} }
+              onScrollEndDrag={ () => {} }
             >
-              <RX.ScrollView
-                style={ styles.scroll }
-                vertical={ true }
-                horizontal={ false }
-                bounces={ false }
-              >
-                <TimeRow
-                  begin={ parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0] }
-                  ending={ parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0] }
-                  minutesPadding={ getWidthByTime(60 - config.begin.split(':')[1]) }
-                />
-                { this.getScheduleView() }
-                <TimeRow
-                  begin={ parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0] }
-                  ending={ parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0] }
-                  minutesPadding={ getWidthByTime(60 - config.begin.split(':')[1]) }
-                />
-              </RX.ScrollView>
+              <TimeRow
+                begin={ parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0] }
+                ending={ parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0] }
+                minutesPadding={ getWidthByTime(60 - config.begin.split(':')[1]) }
+              />
+              { this.getScheduleView() }
+              <TimeRow
+                begin={ parseInt(config.begin.split(':')[1]) > 0 ? parseInt(config.begin.split(':')[0]) + 1 :config.begin.split(':')[0] }
+                ending={ parseInt(config.ending.split(':')[1]) > 0 ? parseInt(config.ending.split(':')[0]) + 1 :config.ending.split(':')[0] }
+                minutesPadding={ getWidthByTime(60 - config.begin.split(':')[1]) }
+              />
             </RX.ScrollView>
-          : <RX.View style={{ height: '100%', justifyContent: 'center' }}>
-              <RX.ActivityIndicator color={ '#fff' } />
-            </RX.View>
-        }
-        <NavBar
-          filterName={ this.state.display }
-          filterFunc={ v => { this.setState({ display: v }) } }
-          modalFunc={ id => this.onShowModal(id) }
-        />
-      </RX.View>
-    );
+          </RX.ScrollView>
+          <NavBar
+            filterName={ this.state.display }
+            filterFunc={ v => { this.setState({ display: v }) } }
+            modalFunc={ id => this.onShowModal(id) }
+          />
+        </RX.View>
+      );
+    } else {
+      return (
+        <RX.View style={ styles.iconContainer }>
+          <RX.Button
+            onPress={ () => this.props.onPressRefetch() }
+          >
+            <RX.Image
+              style={{ height: 32, width: 32 }}
+              source={ iconReload }
+              resizeMode={ 'cover' }
+            />
+            <RX.Text style={ styles.reloadText }>
+              重試
+            </RX.Text>
+          </RX.Button>
+        </RX.View>
+      );
+    }
   }
 }

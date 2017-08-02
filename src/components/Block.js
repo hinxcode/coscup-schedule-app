@@ -26,9 +26,10 @@ const styles = {
   sessionTitle: RX.Styles.createTextStyle({
     maxHeight: cst.SESSION_HEIGHT,
     overflow: 'hidden',
-    color: '#fff',
+    color: '#eee',
     paddingLeft: 3,
-    paddingRight: 3
+    paddingRight: 3,
+    fontSize: 14
   }),
   emptyBlock: RX.Styles.createViewStyle({
     height: cst.SESSION_HEIGHT
