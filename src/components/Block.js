@@ -7,12 +7,7 @@ const styles = {
   sessionBlock: RX.Styles.createViewStyle({
     height: cst.SESSION_HEIGHT,
     justifyContent: 'flex-end',
-    overflow: 'visible',
-    zIndex: 2
-  }),
-  sessionTime: RX.Styles.createTextStyle({
-    color: '#ddd',
-    textAlign: 'center'
+    overflow: 'visible'
   }),
   timeLine: RX.Styles.createViewStyle({
     borderStyle: 'solid',
@@ -29,7 +24,8 @@ const styles = {
     color: '#eee',
     paddingLeft: 3,
     paddingRight: 3,
-    fontSize: 14
+    fontSize: 14,
+    zIndex: 2
   }),
   emptyBlock: RX.Styles.createViewStyle({
     height: cst.SESSION_HEIGHT
@@ -47,7 +43,7 @@ const styles = {
     borderRightWidth: 0
   }),
   button: RX.Styles.createButtonStyle({
-    overflow: 'visible',
+    overflow: 'visible'
   })
 };
 
@@ -81,7 +77,7 @@ const Block = props => {
       ]}
     >
       <RX.Button
-        style={[ styles.button ]}
+        style={ styles.button }
         onPress={ props.onSessionClick ? props.onSessionClick : () => {} }
       >
         {
