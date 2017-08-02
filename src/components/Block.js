@@ -20,12 +20,11 @@ const styles = {
   }),
   sessionTitle: RX.Styles.createTextStyle({
     maxHeight: cst.SESSION_HEIGHT,
-    overflow: 'hidden',
+    overflow: 'visible',
     color: '#eee',
     paddingLeft: 3,
     paddingRight: 3,
-    fontSize: 14,
-    zIndex: 2
+    fontSize: 14
   }),
   emptyBlock: RX.Styles.createViewStyle({
     height: cst.SESSION_HEIGHT
@@ -33,8 +32,7 @@ const styles = {
   verticalTimeLine: RX.Styles.createViewStyle({
     borderStyle: 'solid',
     borderLeftWidth: 1,
-    borderLeftColor: 'rgba(93, 93, 93, 0.8)',
-    zIndex: 1
+    borderLeftColor: 'rgba(93, 93, 93, 0.8)'
   }),
   noLeftBorder: RX.Styles.createViewStyle({
     borderLeftWidth: 0
@@ -77,37 +75,34 @@ export const EmptyBlock = props => {
 
 export const Block = props => {
   return (
-    <RX.Button
-      style={[ styles.button ]}
-      onPress={ props.onSessionClick }
+    <RX.View
+      style={[
+        styles.sessionBlock,
+        props.isOClock ? styles.verticalTimeLine : {},
+        { width: props.width, zIndex: 100 - props.zIndex || 0 }
+      ]}
     >
-      <RX.View
-        style={[
-          styles.sessionBlock,
-          props.isOClock ? styles.verticalTimeLine : {},
-          { width: props.width }
-        ]}
+      <RX.Button
+        style={[ styles.button, { width: props.textWidth || props.width } ]}
+        onPress={ props.detail && props.onSessionClick }
       >
-          {
-            <RX.Text style={[
-              styles.sessionTitle,
-              { width: props.textWidth || props.width }
-            ]}>
-              {
-                props.detail && props.filter && props.detail[props.filter.display]
-                ? getSubString(props.detail[props.filter.display], props.textWidth || props.width)
-                : null
-              }
-            </RX.Text>
-          }
+        <RX.View>
+          <RX.Text style={[ styles.sessionTitle, { width: props.textWidth || props.width } ]}>
+            {
+              props.detail && props.filter && props.detail[props.filter.display]
+              ? getSubString(props.detail[props.filter.display], props.textWidth || props.width)
+              : null
+            }
+          </RX.Text>
           <RX.View style={[
             styles.timeLine,
             props.hasNoLeftBound ? styles.noLeftBorder : {},
             props.hasNoRightBound ? styles.noRightBorder : {},
             { width: props.textWidth || props.width }
           ]} />
-      </RX.View>
-    </RX.Button>
+        </RX.View>
+      </RX.Button>
+    </RX.View>
   );
 }
 

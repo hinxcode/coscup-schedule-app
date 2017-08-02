@@ -55,7 +55,7 @@ export default class Schedule extends RX.Component {
     };
   }
 
-  getBlocks(prev, target, filter) {
+  getBlocks(prev, target, index, filter) {
     const blocks = [];
     let prevEnd;
 
@@ -102,6 +102,7 @@ export default class Schedule extends RX.Component {
             textWidth={ getWidthByTime(sessionTime) }
             detail={ target }
             filter={ filter }
+            zIndex={ index }
             isOClock={ curStart.getMinutes() === 0 }
             onSessionClick={ () => { this.props.onPressNavigate(target) } }
           />
@@ -113,6 +114,7 @@ export default class Schedule extends RX.Component {
               hasNoLeftBound
               hasNoRightBound={ n + 1 < Math.floor((curStart.getMinutes() + sessionTime) / 60) }
               isOClock
+              zIndex={ index + n }
               onSessionClick={ () => { this.props.onPressNavigate(target) } }
             />
           );
@@ -123,6 +125,7 @@ export default class Schedule extends RX.Component {
               width={ getWidthByTime((curStart.getMinutes() + sessionTime) % 60) }
               hasNoLeftBound
               isOClock
+              zIndex={ index + Math.floor((curStart.getMinutes() + sessionTime) / 60) }
               onSessionClick={ () => { this.props.onPressNavigate(target) } }
             />
           );
@@ -134,6 +137,7 @@ export default class Schedule extends RX.Component {
             detail={ target }
             filter={ filter }
             isOClock={ curStart.getMinutes() === 0 }
+            zIndex={ index }
             onSessionClick={ () => { this.props.onPressNavigate(target) } }
           />
         );
@@ -155,9 +159,9 @@ export default class Schedule extends RX.Component {
     for (let room of Object.keys(data)) {
       for (let i = 0; i < data[room].length; i++) {
         if (i < 1) {
-          columns.push(this.getBlocks(null, data[room][i], filter));
+          columns.push(this.getBlocks(null, data[room][i], i, filter));
         } else {
-          columns.push(this.getBlocks(data[room][i - 1], data[room][i], filter));
+          columns.push(this.getBlocks(data[room][i - 1], data[room][i], i, filter));
         }
       }
 
@@ -167,7 +171,7 @@ export default class Schedule extends RX.Component {
       ending.setMinutes(config.ending.split(':')[1]);
 
       if (getDateDiff(new Date(data[room][data[room].length - 1].end), ending) > 60) {
-        columns.push(this.getBlocks(data[room][data[room].length - 1], { start: ending, end: ending }, filter));
+        columns.push(this.getBlocks(data[room][data[room].length - 1], { start: ending, end: ending }, data[room].length - 1, filter));
       }
 
       result.push(
