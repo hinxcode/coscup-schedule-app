@@ -1,6 +1,6 @@
 import React from 'react';
 import RX from 'reactxp';
-import Block from '../components/Block';
+import { Block, EmptyBlock } from '../components/Block';
 import TimeRow from '../components/TimeRow';
 import NavBar from '../components/NavBar';
 import Modals from '../components/modals';
@@ -75,37 +75,21 @@ export default class Schedule extends RX.Component {
     if (breakTime > 0) {
       if (prevEnd.getMinutes() + breakTime > 60) {
         blocks.push(
-          <Block
-            width={ getWidthByTime(60 - prevEnd.getMinutes()) }
-            isEmpty
-            isOClock={ prevEnd.getMinutes() === 0 }
-          />
+          <EmptyBlock width={ getWidthByTime(60 - prevEnd.getMinutes()) } isOClock={ prevEnd.getMinutes() === 0 } />
         );
         for (let n = 1; n < Math.floor((prevEnd.getMinutes() + breakTime) / 60); n++) {
           blocks.push(
-            <Block
-              width={ getWidthByTime(60) }
-              isEmpty
-              isOClock
-            />
+            <EmptyBlock width={ getWidthByTime(60) } isOClock />
           );
         }
         if ((prevEnd.getMinutes() + breakTime) % 60 > 0) {
           blocks.push(
-            <Block
-              width={ getWidthByTime((prevEnd.getMinutes() + breakTime) % 60) }
-              isEmpty
-              isOClock
-            />
+            <EmptyBlock width={ getWidthByTime((prevEnd.getMinutes() + breakTime) % 60) } isOClock />
           );
         }
       } else {
         blocks.push(
-          <Block
-            width={ getWidthByTime(breakTime) }
-            isEmpty
-            isOClock={ prevEnd.getMinutes() === 0 }
-          />
+          <EmptyBlock width={ getWidthByTime(breakTime) } isOClock={ prevEnd.getMinutes() === 0 } />
         );
       }
     }
@@ -118,7 +102,6 @@ export default class Schedule extends RX.Component {
             textWidth={ getWidthByTime(sessionTime) }
             detail={ target }
             filter={ filter }
-            hasNoRightBound
             isOClock={ curStart.getMinutes() === 0 }
             onSessionClick={ () => { this.props.onPressNavigate(target) } }
           />
@@ -127,8 +110,8 @@ export default class Schedule extends RX.Component {
           blocks.push(
             <Block
               width={ getWidthByTime(60) }
-              isEmptyButHasTimeLine
-              hasNoRightBound
+              hasNoLeftBound
+              hasNoRightBound={ n + 1 < Math.floor((curStart.getMinutes() + sessionTime) / 60) }
               isOClock
               onSessionClick={ () => { this.props.onPressNavigate(target) } }
             />
@@ -138,7 +121,7 @@ export default class Schedule extends RX.Component {
           blocks.push(
             <Block
               width={ getWidthByTime((curStart.getMinutes() + sessionTime) % 60) }
-              isEmptyButHasTimeLine
+              hasNoLeftBound
               isOClock
               onSessionClick={ () => { this.props.onPressNavigate(target) } }
             />

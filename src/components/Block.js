@@ -65,25 +65,31 @@ const getSubString = (subject, maxWidth) => {
   }
 }
 
-const Block = props => {
+export const EmptyBlock = props => {
   return (
-    <RX.View
-      style={[
-        props.isEmpty ? styles.emptyBlock : styles.sessionBlock,
-        props.isEmptyButHasTimeLine ? styles.noLeftBorder : {},
-        props.hasNoRightBound ? styles.noRightBorder : {},
-        props.isOClock ? styles.verticalTimeLine : {},
-        { width: props.width }
-      ]}
+    <RX.View style={[
+      styles.emptyBlock,
+      props.isOClock ? styles.verticalTimeLine : {},
+      { width: props.width }
+    ]} />
+  )
+}
+
+export const Block = props => {
+  return (
+    <RX.Button
+      style={[ styles.button ]}
+      onPress={ props.onSessionClick }
     >
-      <RX.Button
-        style={ styles.button }
-        onPress={ props.onSessionClick ? props.onSessionClick : () => {} }
+      <RX.View
+        style={[
+          styles.sessionBlock,
+          props.isOClock ? styles.verticalTimeLine : {},
+          { width: props.width }
+        ]}
       >
-        {
-          props.isEmpty || props.isEmptyButHasTimeLine
-          ? null
-          : <RX.Text style={[
+          {
+            <RX.Text style={[
               styles.sessionTitle,
               { width: props.textWidth || props.width }
             ]}>
@@ -93,26 +99,31 @@ const Block = props => {
                 : null
               }
             </RX.Text>
-        }
-        {
-          props.isEmpty || props.isEmptyButHasTimeLine
-          ? null
-          : <RX.View style={[ styles.timeLine, { width: props.textWidth || props.width } ]} />
-        }
-      </RX.Button>
-    </RX.View>
+          }
+          <RX.View style={[
+            styles.timeLine,
+            props.hasNoLeftBound ? styles.noLeftBorder : {},
+            props.hasNoRightBound ? styles.noRightBorder : {},
+            { width: props.textWidth || props.width }
+          ]} />
+      </RX.View>
+    </RX.Button>
   );
+}
+
+EmptyBlock.propTypes = {
+  width: PropTypes.number,
+  textWidth: PropTypes.number,
+  isOClock: PropTypes.bool
 }
 
 Block.propTypes = {
   width: PropTypes.number,
   textWidth: PropTypes.number,
+  hasNoLeftBound: PropTypes.bool,
+  hasNoRightBound: PropTypes.bool,
   detail: PropTypes.object,
   filter: PropTypes.object,
-  isEmpty: PropTypes.bool,
-  isEmptyButHasTimeLine: PropTypes.bool,
   isOClock: PropTypes.bool,
   onSessionClick: PropTypes.func
 }
-
-export default Block;
