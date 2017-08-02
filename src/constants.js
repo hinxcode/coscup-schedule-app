@@ -11,3 +11,4 @@ export const TIME_ROW_TITLE_COLOR = '#969ea4';
 
 // Modal IDs
 export const MODAL_DATE_PICKER = 'DatePickerDialog';
+export const MODAL_DETAIL = 'DetailModal';

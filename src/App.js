@@ -1,25 +1,16 @@
 import React from 'react';
 import RX, { StatusBar } from 'reactxp';
 import Schedule from './containers/Schedule';
-import Detail from './containers/Detail';
 import { getScheduleData } from './utils';
 
-const NavigationRouteId = {
-  Schedule: 'SchedulePage',
-  Detail: 'DetailPage'
-};
-
 export default class App extends RX.Component {
-  navigator;
-
   constructor(props) {
     super(props);
 
     this.state = {
       json: {},
       dateList: [],
-      date: 0,
-      detail: {}
+      date: 0
     };
 
     StatusBar.setBarStyle('light-content', true);
@@ -35,63 +26,16 @@ export default class App extends RX.Component {
     }).catch(err => {
       RX.Alert.show('錯誤', `議程表資料下載失敗。`);
     });
-
-    this.navigator.immediatelyResetRouteStack([{
-      routeId: NavigationRouteId.Schedule,
-      sceneConfigType: 'Fade'
-    }]);
   }
 
   render() {
     return (
-      <RX.Navigator
-        ref={ ref => { this.navigator = ref } }
-        renderScene={ route => this.renderScene(route) }
+      <Schedule
+        json={ this.state.json }
+        dateList={ this.state.dateList }
+        date={ this.state.date }
+        onChangeDate={ d => { this.setState({ date: d }) } }
       />
     );
-  }
-
-  renderScene(navigatorRoute) {
-    switch (navigatorRoute.routeId) {
-      case NavigationRouteId.Schedule:
-        return (
-          <Schedule
-            json={ this.state.json }
-            dateList={ this.state.dateList }
-            date={ this.state.date }
-            onChangeDate={ d => { this.setState({ date: d }) } }
-            onPressNavigate={ detail => { this.onPressNavigate(detail) } }
-          />
-        );
-      case NavigationRouteId.Detail:
-        return (
-          <Detail
-            detail={ this.state.detail }
-            onNavigateBack={ () => { this.onPressBack() } }
-          />
-        );
-    }
-
-    return null;
-  }
-
-  onPressNavigate(detail) {
-    this.setState({ detail });
-
-    this.navigator.push({
-      routeId: NavigationRouteId.Detail,
-      sceneConfigType: 'Fade',
-      customSceneConfig: {
-        hideShadow: true
-      }
-    });
-
-    StatusBar.setBarStyle('dark-content', true);
-  }
-
-  onPressBack() {
-    this.navigator.pop();
-
-    StatusBar.setBarStyle('light-content', true);
   }
 };

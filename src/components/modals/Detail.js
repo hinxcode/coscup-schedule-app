@@ -1,12 +1,13 @@
 import React from 'react';
 import RX from 'reactxp';
-import * as cst from '../constants';
-import { getDateDiff } from '../utils'
+import * as cst from '../../constants';
+import { getDateDiff } from '../../utils'
 
 const styles = {
   container: RX.Styles.createViewStyle({
     flex: 1,
-    backgroundColor: cst.DETAIL_HEADER_COLOR
+    backgroundColor: cst.DETAIL_HEADER_COLOR,
+    width: '100%'
   }),
   header: RX.Styles.createViewStyle({
     marginTop: cst.STATUS_BAR_HEIGHT,
@@ -108,7 +109,7 @@ export default class Detail extends RX.Component {
     return (
       <RX.View style={ styles.container }>
         <RX.View style={ styles.header }>
-          <RX.Button style={ styles.backButton } onPress={ this.props.onNavigateBack }>
+          <RX.Button style={ styles.backButton } onPress={ this.props.onPressBack }>
             <RX.Text style={ styles.backButtonText }>{ '◀  返回' }</RX.Text>
           </RX.Button>
         </RX.View>
@@ -124,24 +125,27 @@ export default class Detail extends RX.Component {
               <RX.Text style={ styles.nameText}>{ speaker.name }</RX.Text>
             </RX.View>
           </RX.View>
-          <RX.Text style={ styles.subjectText}>{ subject }</RX.Text>
+          <RX.View>
+            <RX.Text style={ styles.subjectText }>{ subject }</RX.Text>
+          </RX.View>
           <RX.View style={ styles.sessionInfo }>
-            <RX.Text style={ styles.roomText}>{ `ROOM ${room}` }</RX.Text>
+            <RX.Text style={ styles.roomText }>{ `ROOM ${room}` }</RX.Text>
             <RX.View style={ styles.timeInfo }>
-              <RX.Text style={ styles.timeText}>
-                { time }
-              </RX.Text>
-              <RX.Text style={ styles.timeDiffText}>
+              <RX.Text style={ styles.timeText }>{ time }</RX.Text>
+              <RX.Text style={ styles.timeDiffText }>
                 { `(${getDateDiff(new Date(start), new Date(end))})` }
               </RX.Text>
             </RX.View>
           </RX.View>
-          <RX.Text style={ styles.summaryText}>{ summary }</RX.Text>
-          <RX.Text style={ styles.summaryText}>{ summary }</RX.Text>
+          <RX.View>
+            <RX.Text style={ styles.summaryText }>{ summary }</RX.Text>
+          </RX.View>
           {
-            speaker.bio ? <RX.Text style={ styles.aboutBioText}>關於講者</RX.Text> : null
+            speaker.bio ? <RX.View><RX.Text style={ styles.aboutBioText}>關於講者</RX.Text></RX.View> : null
           }
-          <RX.Text style={ styles.summaryText}>{ speaker.bio }</RX.Text>
+          {
+            speaker.bio ? <RX.View><RX.Text style={ styles.summaryText }>{ speaker.bio }</RX.Text></RX.View> : null
+          }
         </RX.ScrollView>
       </RX.View>
     );
