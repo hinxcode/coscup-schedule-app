@@ -24,7 +24,7 @@ export const getScheduleData = async () => {
       result[date][json[i].room] = [];
     }
 
-    json[i].time = `${start.getHours()}:${start.getMinutes() < 10 ? '0' + start.getMinutes() : start.getMinutes()} - ${end.getHours()}:${end.getMinutes() < 10 ? '0' + end.getMinutes() : end.getMinutes()}`;
+    json[i].time = `${start.getHours() < 10 ? '0' + start.getHours() : start.getHours()}:${start.getMinutes() < 10 ? '0' + start.getMinutes() : start.getMinutes()} - ${end.getHours() < 10 ? '0' + end.getHours() : end.getHours()}:${end.getMinutes() < 10 ? '0' + end.getMinutes() : end.getMinutes()}`;
     result[date][json[i].room].push(json[i]);
   }
 

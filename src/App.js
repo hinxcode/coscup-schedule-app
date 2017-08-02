@@ -5,11 +5,6 @@ import Detail from './containers/Detail';
 import * as cst from './constants';
 import { getScheduleData } from './utils';
 
-const NavigationRouteId = {
-  Schedule: 'SchedulePage',
-  Detail: 'DetailPage'
-};
-
 export default class App extends RX.Component {
   navigator;
 
@@ -20,27 +15,37 @@ export default class App extends RX.Component {
       json: {},
       dateList: [],
       initDate: 0,
-      detail: {}
+      detail: {},
+      isDownloading: true
     };
 
     StatusBar.setBarStyle('light-content', true);
   }
 
   componentDidMount() {
+    this.getData();
+
+    this.navigator.immediatelyResetRouteStack([{
+      routeId: 'SCHEDULE',
+      sceneConfigType: 'FloatFromLeft'
+    }]);
+  }
+
+  getData() {
     getScheduleData().then(res => {
       this.setState({
         json: res,
         dateList: Object.keys(res),
-        initDate: Object.keys(res)[0]
+        initDate: Object.keys(res)[0],
+        isDownloading: false
       });
     }).catch(err => {
+      this.setState({
+        isDownloading: false
+      });
+
       RX.Alert.show('錯誤', `議程表資料下載失敗。`);
     });
-
-    this.navigator.immediatelyResetRouteStack([{
-      routeId: NavigationRouteId.Schedule,
-      sceneConfigType: 'FloatFromLeft'
-    }]);
   }
 
   render() {
@@ -56,40 +61,41 @@ export default class App extends RX.Component {
   }
 
   renderScene(navigatorRoute) {
-    switch (navigatorRoute.routeId) {
-      case NavigationRouteId.Schedule:
-        return (
-          <Schedule
-            json={ this.state.json }
-            dateList={ this.state.dateList }
-            initDate={ this.state.initDate }
-            onPressNavigate={ detail => { this.onPressNavigate(detail) } }
-          />
-        );
-      case NavigationRouteId.Detail:
-        return (
-          <Detail
-            detail={ this.state.detail }
-            onNavigateBack={ () => { this.onPressBack() } }
-          />
-        );
+    if (navigatorRoute.routeId === 'SCHEDULE') {
+      return (
+        <Schedule
+          json={ this.state.json }
+          dateList={ this.state.dateList }
+          initDate={ this.state.initDate }
+          isDownloading={ this.state.isDownloading }
+          onPressNavigate={ detail => { this.onPressNavigate(detail) } }
+          onPressRefetch={ () => { this.getData() } }
+        />
+      );
+    } else {
+      return (
+        <Detail
+          detail={ this.state.detail }
+          onNavigateBack={ () => { this.onPressBack() } }
+        />
+      );
     }
-
-    return null;
   }
 
   onPressNavigate(detail) {
-    this.setState({ detail });
+    if (detail.subject !== this.state.detail.subject) {
+      this.setState({ detail });
 
-    this.navigator.push({
-      routeId: NavigationRouteId.Detail,
-      sceneConfigType: 'FloatFromLeft',
-      customSceneConfig: {
-        hideShadow: true
-      }
-    });
+      this.navigator.push({
+        routeId: detail.subject,
+        sceneConfigType: 'FloatFromLeft',
+        customSceneConfig: {
+          hideShadow: true
+        }
+      });
 
-    StatusBar.setBarStyle('dark-content', true);
+      StatusBar.setBarStyle('dark-content', true);
+    }
   }
 
   onPressBack() {
