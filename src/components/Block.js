@@ -79,28 +79,27 @@ export const Block = props => {
       style={[
         styles.sessionBlock,
         props.isOClock ? styles.verticalTimeLine : {},
-        { width: props.width, zIndex: 100 - props.zIndex || 0 }
+        { width: props.width },
+        RX.Platform.getType() !== 'android' && { zIndex: 100 - props.zIndex }
       ]}
     >
       <RX.Button
         style={[ styles.button, { width: props.textWidth || props.width } ]}
         onPress={ props.detail && props.onSessionClick }
       >
-        <RX.View>
-          <RX.Text style={[ styles.sessionTitle, { width: props.textWidth || props.width } ]}>
-            {
-              props.detail && props.filter && props.detail[props.filter.display]
-              ? getSubString(props.detail[props.filter.display], props.textWidth || props.width)
-              : null
-            }
-          </RX.Text>
-          <RX.View style={[
-            styles.timeLine,
-            props.hasNoLeftBound ? styles.noLeftBorder : {},
-            props.hasNoRightBound ? styles.noRightBorder : {},
-            { width: props.textWidth || props.width }
-          ]} />
-        </RX.View>
+        <RX.Text style={[ styles.sessionTitle, { width: props.textWidth || props.width } ]}>
+          {
+            props.detail && props.filter && props.detail[props.filter.display]
+            ? getSubString(props.detail[props.filter.display], props.textWidth || props.width)
+            : null
+          }
+        </RX.Text>
+        <RX.View style={[
+          styles.timeLine,
+          props.hasNoLeftBound ? styles.noLeftBorder : {},
+          props.hasNoRightBound ? styles.noRightBorder : {},
+          { width: props.textWidth || props.width }
+        ]} />
       </RX.Button>
     </RX.View>
   );
