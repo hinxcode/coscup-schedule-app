@@ -244,6 +244,7 @@ export default class Schedule extends RX.Component {
             </RX.ScrollView>
           </RX.ScrollView>
           <NavBar
+            date={ this.props.dateList.indexOf(this.state.date) > 0 ? this.props.dateList.indexOf(this.state.date) + 1 : '1' }
             filterName={ this.state.display }
             filterFunc={ v => { this.setState({ display: v }) } }
             modalFunc={ id => this.onShowModal(id) }
