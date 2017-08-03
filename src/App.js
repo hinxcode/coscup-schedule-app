@@ -92,7 +92,7 @@ export default class App extends RX.Component {
       });
 
       this.navigator.push({
-        routeId: detail.speaker.name,
+        routeId: detail.room + detail.start,
         sceneConfigType: 'FloatFromLeft',
         customSceneConfig: {
           hideShadow: true
