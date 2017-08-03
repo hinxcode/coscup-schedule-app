@@ -16,7 +16,8 @@ export default class App extends RX.Component {
       dateList: [],
       initDate: 0,
       detail: {},
-      isDownloading: true
+      isDownloading: true,
+      isTransiting: false
     };
 
     StatusBar.setBarStyle('light-content', true);
@@ -53,6 +54,7 @@ export default class App extends RX.Component {
       <RX.Navigator
         ref={ ref => { this.navigator = ref } }
         renderScene={ route => this.renderScene(route) }
+        transitionCompleted={ () => { this.setState({ isTransiting: false }) } }
         cardStyle={{
           backgroundColor: cst.BACKGROUND_COLOR
         }}
@@ -83,11 +85,14 @@ export default class App extends RX.Component {
   }
 
   onPressNavigate(detail) {
-    if (this.navigator.getCurrentRoutes().length < 2) {
-      this.setState({ detail });
+    if (!this.state.isTransiting) {
+      this.setState({
+        isTransiting: true,
+        detail
+      });
 
       this.navigator.push({
-        routeId: detail.subject,
+        routeId: detail.speaker.name,
         sceneConfigType: 'FloatFromLeft',
         customSceneConfig: {
           hideShadow: true
@@ -100,6 +105,10 @@ export default class App extends RX.Component {
 
   onPressBack() {
     this.navigator.pop();
+
+    this.setState({
+      isTransiting: false
+    });
 
     StatusBar.setBarStyle('light-content', true);
   }
