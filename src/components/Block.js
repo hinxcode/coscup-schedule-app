@@ -94,13 +94,13 @@ export const Block = props => {
             : null
           }
         </RX.Text>
-        <RX.View style={[
-          styles.timeLine,
-          props.hasNoLeftBound ? styles.noLeftBorder : {},
-          props.hasNoRightBound ? styles.noRightBorder : {},
-          { width: props.textWidth || props.width }
-        ]} />
       </RX.Button>
+      <RX.View style={[
+        styles.timeLine,
+        props.hasNoLeftBound ? styles.noLeftBorder : {},
+        props.hasNoRightBound ? styles.noRightBorder : {},
+        { width: props.textWidth || props.width }
+      ]} />
     </RX.View>
   );
 }

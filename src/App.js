@@ -83,7 +83,7 @@ export default class App extends RX.Component {
   }
 
   onPressNavigate(detail) {
-    if (detail.subject !== this.state.detail.subject) {
+    if (this.navigator.getCurrentRoutes().length < 2) {
       this.setState({ detail });
 
       this.navigator.push({
