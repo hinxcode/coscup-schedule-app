@@ -10,6 +10,9 @@ const styles = {
   bar: RX.Styles.createViewStyle({
     flexDirection: 'row',
     justifyContent: 'space-around',
+    position: 'fixed',
+    bottom: 0,
+    width: '100%',
     paddingTop: 5,
     paddingBottom: 5,
     backgroundColor: '#fff'
