@@ -20,7 +20,7 @@ const styles = {
   }),
   sessionTitle: RX.Styles.createTextStyle({
     maxHeight: cst.SESSION_HEIGHT,
-    overflow: 'visible',
+    overflow: 'hidden',
     color: '#eee',
     paddingLeft: 3,
     paddingRight: 3,
@@ -49,13 +49,13 @@ const getSubString = (subject, maxWidth) => {
   if (maxWidth < 30) {
     return subject.substring(0, 5) +
            (subject.length > 5 ? '..' : '');
-  } else if (maxWidth < 50) {
-    return subject.substring(0, 10) +
-           (subject.length > 10 ? '..' : '');
   } else if (maxWidth < 100) {
+    return subject.substring(0, 13) +
+           (subject.length > 13 ? '..' : '');
+  } else if (maxWidth < 150) {
     return subject.substring(0, 20) +
            (subject.length > 20 ? '..' : '');
-  } else if (maxWidth < 150) {
+  } else if (maxWidth < 200) {
     return subject.substring(0, 30) +
            (subject.length > 30 ? '..' : '');
   } else {
